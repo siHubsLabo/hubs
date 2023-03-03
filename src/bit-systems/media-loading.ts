@@ -181,6 +181,8 @@ type MediaInfo = {
   thumbnail: string;
 };
 
+export const MediaLoadedInfo = (MediaLoaded as any).map as Map<EntityID, MediaInfo>;
+
 function* loadMedia(world: HubsWorld, eid: EntityID) {
   let loadingObjEid = 0;
   const addLoadingObjectTimeout = crTimeout(() => {
@@ -198,6 +200,7 @@ function* loadMedia(world: HubsWorld, eid: EntityID) {
     }
     media = yield* loader(world, urlData);
     addComponent(world, MediaLoaded, media);
+    MediaLoadedInfo.set(media, urlData);
   } catch (e) {
     console.error(e);
     media = renderAsEntity(world, ErrorObject());
@@ -242,6 +245,8 @@ const jobs = new JobRunner();
 const mediaLoaderQuery = defineQuery([MediaLoader]);
 const mediaLoaderEnterQuery = enterQuery(mediaLoaderQuery);
 const mediaLoaderExitQuery = exitQuery(mediaLoaderQuery);
+const mediaLoadedQuery = defineQuery([MediaLoaded]);
+const mediaLoadedExitQuery = exitQuery(mediaLoadedQuery);
 export function mediaLoadingSystem(world: HubsWorld) {
   mediaLoaderEnterQuery(world).forEach(function (eid) {
     jobs.add(eid, clearRollbacks => loadAndAnimateMedia(world, eid, clearRollbacks));
@@ -250,6 +255,8 @@ export function mediaLoadingSystem(world: HubsWorld) {
   mediaLoaderExitQuery(world).forEach(function (eid) {
     jobs.stop(eid);
   });
+
+  mediaLoadedExitQuery(world).forEach(eid => MediaLoadedInfo.delete(eid));
 
   jobs.tick();
 }
