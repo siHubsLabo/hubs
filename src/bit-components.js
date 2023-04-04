@@ -347,3 +347,6 @@ export const LinearScale = defineComponent({
   targetZ: Types.f32
 });
 export const Quack = defineComponent();
+export const BehaviorGraph = defineComponent();
+export const LocalAvatar = defineComponent();
+export const RemoteAvatar = defineComponent();
