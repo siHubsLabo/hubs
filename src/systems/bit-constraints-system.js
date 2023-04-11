@@ -19,7 +19,8 @@ import {
   ConstraintHandLeft,
   ConstraintHandRight,
   ConstraintRemoteLeft,
-  ConstraintRemoteRight
+  ConstraintRemoteRight,
+  NetworkedTransform
 } from "../bit-components";
 import { takeOwnership } from "../utils/take-ownership";
 
@@ -39,6 +40,7 @@ const queryHandLeft = defineQuery([HeldHandLeft, OffersHandConstraint]);
 const queryEnterHandLeft = enterQuery(queryHandLeft);
 const queryExitHandLeft = exitQuery(queryHandLeft);
 
+const savedBodyType = new Map();
 const grabBodyOptions = { type: "dynamic", activationState: DISABLE_DEACTIVATION };
 const releaseBodyOptions = { activationState: ACTIVE_TAG };
 
