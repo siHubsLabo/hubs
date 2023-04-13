@@ -354,3 +354,10 @@ export const Quack = defineComponent();
 export const BehaviorGraph = defineComponent();
 export const LocalAvatar = defineComponent();
 export const RemoteAvatar = defineComponent();
+
+const _CustomTags = defineComponent();
+/**
+ * @type {typeof _CustomTags & { tags: Map<EntityID, string[]>}}
+ */
+export const CustomTags = _CustomTags;
+CustomTags.tags = new Map();
