@@ -185,6 +185,8 @@ export function mainTick(xrFrame: XRFrame, renderer: WebGLRenderer, scene: Scene
     aframeSystems[systemNames[i]].tick(t, dt);
   }
 
+  behaviorGraphSystem(world);
+
   networkReceiveSystem(world);
   onOwnershipLost(world);
   sceneLoadingSystem(world, hubsSystems.environmentSystem, hubsSystems.characterController);
@@ -267,8 +269,6 @@ export function mainTick(xrFrame: XRFrame, renderer: WebGLRenderer, scene: Scene
 
   mixerAnimatableSystem(world);
   loopAnimationSystem(world);
-
-  behaviorGraphSystem(world);
 
   // All systems that update text properties should run before this
   textSystem(world);
