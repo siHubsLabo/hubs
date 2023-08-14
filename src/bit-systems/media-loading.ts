@@ -2,10 +2,12 @@ import { addComponent, defineQuery, enterQuery, exitQuery, hasComponent, removeC
 import { Box3, Euler, Vector3 } from "three";
 import { HubsWorld } from "../app";
 import {
+  Capturable,
   GLTFModel,
   MediaContentBounds,
   MediaLoaded,
   MediaLoader,
+  MediaRoot,
   Networked,
   ObjectMenuTarget
 } from "../bit-components";
@@ -28,7 +30,7 @@ import { loadHtml } from "../utils/load-html";
 import { MediaType, mediaTypeName, resolveMediaInfo } from "../utils/media-utils";
 import { EntityID } from "../utils/networking-types";
 
-const getBox = (() => {
+export const getBox = (() => {
   const rotation = new Euler();
   return (world: HubsWorld, eid: EntityID, rootEid: EntityID, worldSpace?: boolean) => {
     const box = new Box3();
@@ -199,7 +201,9 @@ function* loadMedia(world: HubsWorld, eid: EntityID) {
       throw new UnsupportedMediaTypeError(eid, urlData.mediaType);
     }
     media = yield* loader(world, urlData);
+    addComponent(world, MediaRoot, eid);
     addComponent(world, MediaLoaded, media);
+    addComponent(world, Capturable, media);
     MediaLoadedInfo.set(media, urlData);
   } catch (e) {
     console.error(e);
